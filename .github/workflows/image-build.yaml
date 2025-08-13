@@ -28,6 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image-digest: ${{ steps.push.outputs.digest }}
+      image: ${{ steps.image.outputs.image }}
+      digest: ${{ steps.build.outputs.digest }}
     permissions:
       contents: read
       packages: write
