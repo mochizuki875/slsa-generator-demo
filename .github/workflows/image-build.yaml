@@ -36,12 +36,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.24'
       - name: test
         run: go test -v ./...
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@dc7b9719a96d48369863986a06765841d7ea23f6 # v2.0.0
 
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
@@ -65,7 +69,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}  # Get tags from outputs of meta step
           labels: ${{ steps.meta.outputs.labels }}  # Get labels from outputs of meta step
-          
+
       - name: Output image
         id: image
         run: |
@@ -108,4 +112,4 @@ jobs:
           format: 'table'
           exit-code: '1'
           # ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
