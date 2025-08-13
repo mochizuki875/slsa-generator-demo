@@ -77,7 +77,6 @@ jobs:
       image: ${{ needs.build.outputs.image }}
       digest: ${{ needs.build.outputs.digest }}
       registry-username: ${{ github.actor }}
-      provenance-registry: ${{ env.REGISTRY }}
     secrets:
       registry-password: ${{ secrets.GITHUB_TOKEN }}
 
