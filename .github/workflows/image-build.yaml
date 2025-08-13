@@ -1,3 +1,7 @@
+name: Image Build
+
+on: [push]
+
 env:
   IMAGE_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
