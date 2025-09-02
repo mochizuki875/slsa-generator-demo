@@ -18,13 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v2.3.4
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@dc7b9719a96d48369863986a06765841d7ea23f6 # v2.0.0
+        uses: docker/setup-buildx-action@v3
 
       - name: Authenticate Docker
-        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ github.actor }}
@@ -32,12 +32,13 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a # v4.0.1
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
 
       # - name: Build and push Docker image
-      #   uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0
+      #   uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0(古いのでset-output deprecatedのエラー出る)
+      # https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
       #   id: build
       #   with:
       #     push: true
@@ -45,7 +46,7 @@ jobs:
       #     labels: ${{ steps.meta.outputs.labels }}
       - name: Build and push Container image
         id: build
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4  # https://github.com/docker/build-push-action
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
@@ -53,9 +54,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}  # Get tags from outputs of meta step
           labels: ${{ steps.meta.outputs.labels }}  # Get labels from outputs of meta step
 
-      # ないとエラーになる
-      # 多分ここでset-output使っててdeprecated
-      # https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+
       - name: Output image
         id: image
         run: |
